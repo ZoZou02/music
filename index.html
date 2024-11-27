@@ -1,348 +1,44 @@
 <html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/music-controller.css">
-    <title>那天的雪</title>
-    <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        #typing {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        #typing::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('https://cdn.jsdelivr.net/gh/ZoZou02/zozou-pic/%E9%9B%AA.png');
-            background-size: cover;
-            background-position: center;
-            filter: blur(5px);
-            z-index: -1;
-            transition: transform 0.3s ease;
-        }
-
-
-
-        #content {
-            font-size: 32px !important;
-            letter-spacing: 10px !important;
-            color: #fff !important;
-            text-shadow: 0 0 10px #5a5a5a, 0 0 10px #333333 !important;
-            font-family: 'JetBrains Mono', monospace, 'Microsoft Yahei', 'Droid Sans Fallback' !important;
-            transition: transform 0.3s ease-in-out, font-size 0.3s ease-in-out !important;
-            font-weight: bold !important;
-        }
-
-        #content:hover {
-            font-size: 52px !important;
-            transform: scale(1.1);
-        }
-
-        .audioBox {
-            position: absolute;
-            bottom: 200px;
-            left: 43%;
-            transform: translate(-50%, -50%);
-            transition: transform 0.8s ease-in-out, opacity 0.5s ease-in-out;
-            opacity: 1;
-            z-index: 1000;
-        }
-
-        #snow-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .snowflake {
-            position: absolute;
-            background-color: #fff;
-            border-radius: 50%;
-            opacity: 0.8;
-            pointer-events: none;
-        }
-
-        #volumeIcon {
-            position: relative;
-            left: 216px;
-        }
-
-        @media (max-width: 768px) {
-            .audioBox {
-                bottom: 100px; /* 在手机上调整底部位置 */
-                left: 50%; /* 居中对齐 */
-                transform: translate(-50%, -50%); /* 保持居中 */
-                width: 90%; /* 设置宽度为90% */
-            }
-        }
-    </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/music-controller.css">
+	<title>那天的雪</title>
 </head>
 
 <body>
-    <div id="snow-container"></div>
-    <div id="typing">
-        <div id="content">那天的雪</div>
-    </div>
+	<div id="snow-container"></div>
+	<div id="typing">
+		<div id="content">那天的雪</div>
+	</div>
 
-    <div class="audioBox">
-        <div id="audioPlayerContainer">
-            <div id="audioPlayerControl">
-                <svg id="playPauseIcon" width="40" height="48" viewBox="-6 -2 32 32">
-                    <path id="playIcon" d="M10 7.5v15L22.5 15z" fill="#fd2d5c" />
-                    <path id="pauseIcon" d="M9 22.5h4.5v-15H9v15zm7.5-15v15H21v-15h-4.5z" fill="#fd2d5c"
-                        style="display: none;" />
-                </svg>
-                <div id="progressBarContainer">
-                    <div id="progressBar"></div>
-                </div>
-                <svg id="volumeIcon" width="40" height="48" viewBox="0 0 24 24">
-                    <path d="M13 5v14l-5-4H3V9h5z" fill="#fd2d5c" />
-                    <path stroke-linecap="round" d="M13 14c1.5-1 1.5-3 0-4" fill="#fd2d5c" />
-                </svg>
-        
-            </div>
-            <div id="volumeControlContainer" style="transform: translate(236px, -34px)">
-                <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
-            </div>
-        
-            <audio id="audioPlayer">
-                <source src="../assets/music/Geebar - 那天的雪.mp3" type="audio/mp3">
-            </audio>
-        </div>
+	<div class="audioBox">
+		<div id="audioPlayerContainer">
+			<div id="audioPlayerControl">
+				<svg id="playPauseIcon" width="40" height="48" viewBox="-6 -2 32 32">
+					<path id="playIcon" d="M10 7.5v15L22.5 15z" fill="#fd2d5c" />
+					<path id="pauseIcon" d="M9 22.5h4.5v-15H9v15zm7.5-15v15H21v-15h-4.5z" fill="#fd2d5c" style="display: none;" />
+				</svg>
+				<div id="progressBarContainer">
+					<div id="progressBar"></div>
+				</div>
+				<svg id="volumeIcon" width="40" height="48" viewBox="0 0 24 24">
+					<path d="M13 5v14l-5-4H3V9h5z" fill="#fd2d5c" />
+					<path stroke-linecap="round" d="M13 14c1.5-1 1.5-3 0-4" fill="#fd2d5c" />
+				</svg>
 
-    </div>
+			</div>
+			<div id="volumeControlContainer" style="transform: translate(230px, -26px)">
+				<input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
+			</div>
 
-
-    <script src="../assets/js/music-controller.js"></script>
-
-    <script>
-        const lyrics = [
-            { text: "那天的雪—Geebar", time: 0 },
-            { text: "已经没别的话语", time: 26 },
-            { text: "BGM循环播放", time: 27 },
-            { text: "天空偷吃的伴侣", time: 28.5 },
-            { text: "消失没下雨", time: 29.5 },
-            { text: "卸下的钥匙放桌上", time: 30 },
-            { text: "这一生最后的一次", time: 32 },
-            { text: "太匆忙没什么仪式", time: 33.5 },
-            { text: "我记性差差到了极致", time: 35 },
-            { text: "希望能记住你名字", time: 36.5 },
-            { text: "可我承诺了不想再回头", time: 38 },
-            { text: "河水干涸也不选择回流", time: 39.5 },
-            { text: "这一年受够了的迷茫", time: 41 },
-            { text: "离开我 即便皱紧了眉头", time: 42.5 },
-            { text: "其实很想逃避很想瓦", time: 44 },
-            { text: "撤掉了文竹文昌塔", time: 45.5 },
-            { text: "其实倒也没有很想打", time: 47 },
-            { text: "但是还能藏在哪儿", time: 49 },
-            { text: "伤 穿过手心", time: 51 },
-            { text: "刚 锁上手机", time: 52.5 },
-            { text: "光 光速逃逸地 消失在我眼前", time: 54 },
-            { text: "装 装的简单", time: 57 },
-            { text: "一章一章地连环", time: 58 },
-            { text: "可当 夜晚又会回想起那天的", time: 60 },
-            { text: "雪", time: 63 },
-            { text: "跟着寒风飘旋转的雪", time: 64 },
-            { text: "渐渐高空掉宣判的雪", time: 67 },
-            { text: "求求你来回答我", time: 70.5 },
-            { text: "这片美丽的枷锁", time: 72 },
-            { text: "难道也算惩罚我", time: 73.5 },
-            { text: "雪", time: 75.5 },
-            { text: "跟着寒风飘旋转的雪", time: 77 },
-            { text: "我永远做不到那么坚决", time: 79.8 },
-            { text: "所以能否回答我", time: 83.3 },
-            { text: "这片美丽的枷锁", time: 84.8 },
-            { text: "难道也是惩罚我", time: 86.3 },
-            { text: "慢慢冷静", time: 88 },
-            { text: "先慢慢变得冷静", time: 89 },
-            { text: "看清眼前的棱镜", time: 90.5 },
-            { text: "现实投射的梦境", time: 92 },
-            { text: "突然不小心离太近", time: 94 },
-            { text: "不断找寻替代品", time: 96 },
-            { text: "焦虑堆了几百斤", time: 98 },
-            { text: "顾虑将自己的期待禁锢", time: 99.3 },
-            { text: "可没有幻想谁能妄想完成拼图", time: 101.3 },
-            { text: "又是谁在半场退出谁在半场进入", time: 104.5 },
-            { text: "无论谁在观赏谁在半夜完成音符", time: 107.5 },
-            { text: "唉 希望早日不用再倾诉", time: 111 },
-            { text: "想回到以前 发明足够的开心", time: 113.5 },
-            { text: "阴天暴雨前 下定足够的决心", time: 116.5 },
-            { text: "安逸焦虑前 答应足够的决定", time: 120 },
-            { text: "结果没发明 没下定 没答应", time: 123 },
-            { text: "无助无助", time: 126 },
-            { text: "究竟搭上了什么赌注赌注", time: 128 },
-            { text: "以前也不能回到", time: 131 },
-            { text: "以前也不能回到以前将故事全推倒", time: 132 },
-            { text: "有谁能在未来回以前尝后悔的味道", time: 135.5 },
-            { text: "伤 穿过手心", time: 139 },
-            { text: "刚 锁上手机", time: 140.5 },
-            { text: "光 光速逃逸地 消失在我眼前", time: 142 },
-            { text: "装 装的简单", time: 145 },
-            { text: "一章一章地连环", time: 147 },
-            { text: "可当 夜晚又会回想起那天的", time: 148.8 },
-            { text: "雪", time: 151.2 },
-            { text: "跟着寒风飘旋转的雪", time: 153 },
-            { text: "渐渐高空掉宣判的雪", time: 155.5 },
-            { text: "求求你来回答我", time: 158.8 },
-            { text: "这片美丽的枷锁", time: 160.5 },
-            { text: "难道也算惩罚我", time: 162 },
-            { text: "雪", time: 164 },
-            { text: "跟着寒风飘旋转的雪", time: 165.5 },
-            { text: "我永远做不到那么坚决", time: 168.5 },
-            { text: "所以能否回答我", time: 171.5 },
-            { text: "这片美丽的枷锁", time: 173 },
-            { text: "难道也是惩罚我", time: 174.8 },
-            { text: "", time: 184 },
-        ];
-
-        const contentElement = document.getElementById('content');
-        let currentLyricIndex = 0;
-        let index = 0;
-
-        /* 更新歌词 */
-        function updateLyrics() {
-            const currentTime = audioPlayer.currentTime;
-            if (currentLyricIndex < lyrics.length && currentTime >= lyrics[currentLyricIndex].time) {
-                const text = lyrics[currentLyricIndex].text;
-                contentElement.textContent = "";
-                index = 0;
-                if (lyrics[currentLyricIndex + 1].time - currentTime < 0.01) {
-                    contentElement.textContent = text;
-                } else {
-                    addNextCharacter(text);
-                }
-                currentLyricIndex++;
-            }
-            requestAnimationFrame(updateLyrics);
-        }
-
-        /* 添加下一个字符 */
-        function addNextCharacter(text) {
-            if (index < text.length) {
-                contentElement.textContent += text[index];
-                index++;
-                if (currentLyricIndex === lyrics.length - 1) {
-                    setTimeout(() => addNextCharacter(text), 130);
-                } else {
-                    setTimeout(() => addNextCharacter(text), (lyrics[currentLyricIndex + 1].time - audioPlayer.currentTime) / text.length * 100);
-                    console.log((lyrics[currentLyricIndex + 1].time - audioPlayer.currentTime) / text.length * 100)
-                }
-            }
-        }
-
-        /* 创建雪花 */
-        function createSnowflakes() {
-            const snowContainer = document.getElementById('snow-container');
-            const numberOfSnowflakes = 100;
-
-            for (let i = 0; i < numberOfSnowflakes; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.style.width = `${Math.random() * 5 + 2}px`;
-                snowflake.style.height = snowflake.style.width;
-                snowflake.style.left = `${Math.random() * 100}vw`;
-                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
-                snowflake.style.animationDelay = `${Math.random() * 2}s`;
-                snowContainer.appendChild(snowflake);
-            }
-        }
-
-        /* 动画雪花 */
-        function animateSnowflakes() {
-            const snowflakes = document.querySelectorAll('.snowflake');
-            snowflakes.forEach(snowflake => {
-                const startPosition = parseFloat(snowflake.style.left);
-                const endPosition = startPosition + (Math.random() * 10 - 5);
-
-                snowflake.animate([
-                    { transform: `translate(0, -10px)`, opacity: 0 },
-                    { opacity: 0.8, offset: 0.1 },
-                    { transform: `translate(${endPosition - startPosition}vw, 100vh)`, opacity: 0 }
-                ], {
-                    duration: parseFloat(snowflake.style.animationDuration) * 1000,
-                    iterations: Infinity
-                });
-            });
-        }
-
-        let snowflakesCreated = false;
-        let snowAnimation;
-
-        audioPlayer.addEventListener('play', () => {
-            if (!snowflakesCreated) {
-                createSnowflakes();
-                snowflakesCreated = true;
-            }
-            snowAnimation = requestAnimationFrame(animateSnowflakes);
-            currentLyricIndex = 0;
-            updateLyrics();
-        });
-
-        audioPlayer.addEventListener('pause', () => {
-            if (snowAnimation) {
-                cancelAnimationFrame(snowAnimation);
-            }
-            const snowflakes = document.querySelectorAll('.snowflake');
-            snowflakes.forEach(snowflake => {
-                snowflake.getAnimations().forEach(animation => animation.pause());
-            });
-        });
-
-        audioPlayer.addEventListener('ended', () => {
-            if (snowAnimation) {
-                cancelAnimationFrame(snowAnimation);
-            }
-        });
-
-        audioPlayer.addEventListener('seeked', () => {
-            currentLyricIndex = lyrics.findIndex(lyric => lyric.time > audioPlayer.currentTime) - 1;
-            if (currentLyricIndex < 0) currentLyricIndex = 0;
-            contentElement.textContent = "";
-            index = 0;
-            updateLyrics();
-        });
-
-        let mouseMoveTimeout;
-        let displayAudio = true;
-
-        document.addEventListener('mousemove', () => {
-            clearTimeout(mouseMoveTimeout);
-            document.querySelector('.audioBox').style.transform = 'translate(-50%, -50%)';
-            document.querySelector('.audioBox').style.opacity = 1;
-            document.body.style.cursor = 'auto';
-            displayAudio = true;
-
-            mouseMoveTimeout = setTimeout(() => {
-                document.querySelector('.audioBox').style.transform = 'translate(-50%, 50%)';
-                document.querySelector('.audioBox').style.opacity = 0;
-                document.body.style.cursor = 'none';
-                displayAudio = false;
-            }, 5000);
-        });
-
-    </script>
+			<audio id="audioPlayer">
+				<source src="http://music.163.com/song/media/outer/url?id=2123485866.mp3" type="audio/mp3">
+			</audio>
+		</div>
+	</div>
+    <script src="assets/js/music-controller.js"></script>
 </body>
 
 </html>
