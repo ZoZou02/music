@@ -1,63 +1,67 @@
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="assets/css/music-controller.css">
-	<link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png" sizes="96x96" />
-	<link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
-	<link rel="shortcut icon" href="assets/favicon/favicon.ico" />
-	<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
-	<link rel="manifest" href="assets/favicon/site.webmanifest" />
-	<title>那天的雪</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/line.css">
+    <link rel="stylesheet" href="/assets/css/home.css">
+	<link rel="icon" type="image/png" href="/assets/home/favicon-96x96.png" sizes="96x96" />
+	<link rel="icon" type="image/svg+xml" href="/assets/home/favicon.svg" />
+	<link rel="shortcut icon" href="/assets/home/favicon.ico" />
+	<link rel="apple-touch-icon" sizes="180x180" href="/assets/home/apple-touch-icon.png" />
+	<link rel="manifest" href="/assets/home/site.webmanifest" />
+    <title>好痛好想回家</title>
+
 </head>
 
 <body>
-	<div id="snow-container"></div>
-	<div class="nav-arrows">
-		<a href="pages/home.html" class="arrow arrow-left">
-			<svg viewBox="0 0 24 24" width="40" height="40">
-				<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="#fd2d5c"/>
-			</svg>
-		</a>
-		<a href="pages/home.html" class="arrow arrow-right">
-			<svg viewBox="0 0 24 24" width="40" height="40">
-				<path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="#fd2d5c"/>
-			</svg>
-		</a>
-	</div>
-	<div id="typing">
-		<div id="content">那天的雪</div>
-	</div>
+    <div class="background-blur"></div>
+    <div class="overlay"></div>
+    <div id="typing">
+        <div id="content">好痛好想回家</div>
+    </div>
 
-	<div class="audioBox">
-		<div id="audioPlayerContainer">
-			<div id="audioPlayerControl">
-				<svg id="playPauseIcon" width="40" height="48" viewBox="-6 -2 32 32">
-					<path id="playIcon" d="M10 7.5v15L22.5 15z" fill="#fd2d5c" />
-					<path id="pauseIcon" d="M9 22.5h4.5v-15H9v15zm7.5-15v15H21v-15h-4.5z" fill="#fd2d5c"
-						style="display: none;" />
-				</svg>
-				<div id="progressBarContainer">
-					<div id="progressBar"></div>
-				</div>
-				<svg id="volumeIcon" width="40" height="48" viewBox="0 0 24 24">
-					<path d="M13 5v14l-5-4H3V9h5z" fill="#fd2d5c" />
-					<path stroke-linecap="round" d="M13 14c1.5-1 1.5-3 0-4" fill="#fd2d5c" />
-				</svg>
+    <div class="audioBox">
+        <div id="audioPlayerContainer">
+            <div id="audioPlayerControl">
+                <svg id="playPauseIcon" width="40" height="48" viewBox="-6 -2 32 32">
+                    <path id="playIcon" d="M10 7.5v15L22.5 15z" fill="#5c5387" />
+                    <path id="pauseIcon" d="M9 22.5h4.5v-15H9v15zm7.5-15v15H21v-15h-4.5z" fill="#5c5387"
+                        style="display: none;" />
+                </svg>
+                <div id="progressBarContainer">
+                    <div id="progressBar"></div>
+                </div>
+                <svg id="volumeIcon" width="40" height="48" viewBox="0 0 24 24">
+                    <path d="M13 5v14l-5-4H3V9h5z" fill="#5c5387" />
+                    <path stroke-linecap="round" d="M13 14c1.5-1 1.5-3 0-4" fill="#5c5387" />
+                </svg>
 
-			</div>
-			<div id="volumeControlContainer" style="transform: translate(230px, -26px)">
-				<input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
-			</div>
+            </div>
+            <div id="volumeControlContainer" style="transform: translate(230px, -40px)">
+                <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
+            </div>
 
-			<audio id="audioPlayer">
-				<source src="http://music.163.com/song/media/outer/url?id=2123485866.mp3" type="audio/mp3">
-			</audio>
-		</div>
-	</div>
-	<script src="assets/js/music-controller.js"></script>
-	<script src="/assets/js/page-transition.js"></script>
+            <audio id="audioPlayer">
+                <source src="http://music.163.com/song/media/outer/url?id=2085424588.mp3" type="audio/mp3">
+            </audio>
+        </div>
+    </div>
+    <div class="image-container">
+        <div class="mask"></div>
+        <img src="https://cdn.jsdelivr.net/gh/ZoZou02/zozou-pic/geefall1.png" class="geebar-image" alt="Geebar">
+        <img src="https://cdn.jsdelivr.net/gh/ZoZou02/zozou-pic/phone-stra.png" class="phone-image" alt="Phone">
+    </div>
+
+    <div class="glitch-overlay"></div>
+    <div id="fullscreen-btn">
+        <svg viewBox="0 0 24 24" fill="#5c5387">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+        </svg>
+    </div>
+    <script src="/assets/js/home.js"></script>
+    <script src="/assets/js/line.js"></script>
 </body>
 
 </html>
