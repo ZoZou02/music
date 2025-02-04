@@ -515,6 +515,8 @@ function updateProgressBar() {
             phoneImage.style.left = '50%';
             Image.style.top = '50%';
             Image.style.transition = 'none';
+            // 字幕
+            content.style.opacity = '1';
         }
 
         //---------------------------------- 插入动画结束 ------------------------------------------------- 
@@ -541,6 +543,9 @@ function resetPlayer() {
     audioPlayer.currentTime = 0;
     isPlay = false;
     // window.location.reload();
+
+    const Image = document.querySelector(".image-container");
+    Image.classList.add("backing");
 }
 
 // 开始拖动进度条
@@ -656,6 +661,8 @@ audioPlayer.addEventListener("play", () => {
     //添加手机旋转
     const phoneImage = document.querySelector(".phone-image");
     phoneImage.classList.add("rotate");
+
+    Image.classList.remove("backing");
 });
 
 // 自动下滑功能
@@ -731,7 +738,7 @@ document.addEventListener("mousemove", () => {
     }, 5000);
 });
 
-// 添加全屏功能
+// 全屏
 const fullscreenBtn = document.getElementById('fullscreen-btn');
 
 fullscreenBtn.addEventListener('click', () => {
