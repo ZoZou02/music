@@ -1,0 +1,20 @@
+.glitch-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+
+}
+
+.glitched-line {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: url('https://cdn.jsdelivr.net/gh/ZoZou02/zozou-pic/202502021106645.png');
+    background-size: cover;
+    opacity: 0.8;
+    display: none;
+    z-index: 1000;
+}
