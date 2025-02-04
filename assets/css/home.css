@@ -36,8 +36,8 @@ body {
 
 #content {
 	margin-top: 80vh;
-	font-size: 44px;
-	letter-spacing: 25px;
+	font-size: 3vw;
+	letter-spacing: 1.5vw;
 	color: #fff;
 	font-family: "NSimSun", monospace;
 	transition: transform 0.3s ease-in-out, font-size 0.3s ease-in-out, opacity 1s ease;
@@ -45,7 +45,7 @@ body {
 }
 
 #content:hover {
-	font-size: 50px;
+	font-size: 3.5vw;
 	transform: scale(1.1);
 }
 
