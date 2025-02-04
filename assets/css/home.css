@@ -383,6 +383,26 @@ body {
 	animation: blackDrop 12s ease-in-out forwards;
 }
 
+/* 结束回弹 */
+@keyframes  back{
+	0%{
+		top: 50%;
+	}
+
+	50%{
+		top: 60%;
+	}
+
+	100%{
+		top: 50%;
+	}
+	
+}
+
+.backing{
+	animation: back 0.8s ease-in-out forwards;
+}
+
 /* 全屏按钮样式 */
 #fullscreen-btn {
 	position: fixed;
