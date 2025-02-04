@@ -1,3 +1,4 @@
+// 获取音频播放器和控制元素
 const audioPlayer = document.getElementById("audioPlayer");
 const audioPlayerControl = document.getElementById("audioPlayerControl");
 const playPauseIcon = document.getElementById("playPauseIcon");
@@ -12,6 +13,8 @@ const volumeControlContainer = document.getElementById(
 const volumeControl = document.getElementById("volumeControl");
 const contentElement = document.getElementById("content");
 const snowContainer = document.getElementById("snow-container");
+
+// 歌词数组，包含歌词文本和对应时间
 const lyrics = [
 	{
 		text: "那天的雪—Geebar",
@@ -319,29 +322,33 @@ const lyrics = [
 	}
 ];
 
-let isDragging = false;
-let clickTime, inputTime;
-let currentLyricIndex = 0;
-let index = 0;
-let snowAnimation;
+// 控制变量
+let isDragging = false; // 是否正在拖动进度条
+let clickTime, inputTime; // 用于控制点击和输入的时间
+let currentLyricIndex = 0; // 当前歌词索引
+let index = 0; // 当前字符索引
+let snowAnimation; // 雪花动画的请求ID
 
-playPauseIcon.addEventListener("click", togglePlay);
-audioPlayer.addEventListener("timeupdate", updateProgressBar);
-audioPlayer.addEventListener("ended", resetPlayer);
-progressBarContainer.addEventListener("click", seek);
-progressBarContainer.addEventListener("mousedown", startDrag);
-document.addEventListener("mousemove", drag);
-document.addEventListener("mouseup", endDrag);
-volumeIcon.addEventListener("click", toggleVolumeControl);
-volumeControl.addEventListener("input", updateVolume);
-document.addEventListener("click", hideVolumeControl);
+// 添加事件监听器
+playPauseIcon.addEventListener("click", togglePlay); // 播放/暂停按钮
+audioPlayer.addEventListener("timeupdate", updateProgressBar); // 更新进度条
+audioPlayer.addEventListener("ended", resetPlayer); // 播放结束时重置播放器
+progressBarContainer.addEventListener("click", seek); // 点击进度条跳转
+progressBarContainer.addEventListener("mousedown", startDrag); // 开始拖动进度条
+document.addEventListener("mousemove", drag); // 拖动进度条
+document.addEventListener("mouseup", endDrag); // 结束拖动
+volumeIcon.addEventListener("click", toggleVolumeControl); // 音量控制按钮
+volumeControl.addEventListener("input", updateVolume); // 音量输入变化
+document.addEventListener("click", hideVolumeControl); // 点击隐藏音量控制
 
+// 播放/暂停音频
 function togglePlay() {
 	audioPlayer.paused ? audioPlayer.play() : audioPlayer.pause();
 	playIcon.style.display = audioPlayer.paused ? "block" : "none";
 	pauseIcon.style.display = audioPlayer.paused ? "none" : "block";
 }
 
+// 更新进度条
 function updateProgressBar() {
 	if (!isDragging) {
 		const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
@@ -350,11 +357,13 @@ function updateProgressBar() {
 	}
 }
 
+// 跳转到指定时间
 function seek(event) {
 	audioPlayer.currentTime =
 		(event.offsetX / progressBarContainer.offsetWidth) * audioPlayer.duration;
 }
 
+// 重置播放器
 function resetPlayer() {
 	playIcon.style.display = "block";
 	pauseIcon.style.display = "none";
@@ -363,11 +372,13 @@ function resetPlayer() {
 	audioPlayer.currentTime = 0;
 }
 
+// 开始拖动进度条
 function startDrag(event) {
 	isDragging = true;
 	drag(event);
 }
 
+// 拖动进度条
 function drag(event) {
 	if (isDragging) {
 		const percent = Math.min(
@@ -383,6 +394,7 @@ function drag(event) {
 	}
 }
 
+// 结束拖动进度条
 function endDrag(event) {
 	if (isDragging) {
 		isDragging = false;
@@ -398,6 +410,7 @@ function endDrag(event) {
 	}
 }
 
+// 切换音量控制
 function toggleVolumeControl() {
 	volumeControlContainer.style.transform =
 		volumeControlContainer.style.transform === "translate(230px, -26px)"
@@ -412,6 +425,7 @@ function toggleVolumeControl() {
 	}, 5000);
 }
 
+// 更新音量
 function updateVolume() {
 	audioPlayer.volume = volumeControl.value;
 	clearTimeout(inputTime);
@@ -420,6 +434,7 @@ function updateVolume() {
 	}, 2000);
 }
 
+// 隐藏音量控制
 function hideVolumeControl(event) {
 	if (
 		!volumeControlContainer.contains(event.target) &&
@@ -429,6 +444,7 @@ function hideVolumeControl(event) {
 	}
 }
 
+// 更新歌词显示
 function updateLyrics() {
 	const currentTime = audioPlayer.currentTime;
 	if (
@@ -451,6 +467,7 @@ function updateLyrics() {
 	requestAnimationFrame(updateLyrics);
 }
 
+// 添加下一个字符到歌词显示
 function addNextCharacter(text) {
 	if (index < text.length) {
 		contentElement.textContent += text[index++];
@@ -464,6 +481,7 @@ function addNextCharacter(text) {
 	}
 }
 
+// 创建雪花
 function createSnowflakes() {
 	for (let i = 0; i < 100; i++) {
 		const snowflake = document.createElement("div");
@@ -477,6 +495,7 @@ function createSnowflakes() {
 	}
 }
 
+// 动画雪花
 function animateSnowflakes() {
 	document.querySelectorAll(".snowflake").forEach((snowflake) => {
 		const startPosition = parseFloat(snowflake.style.left);
@@ -498,6 +517,7 @@ function animateSnowflakes() {
 	});
 }
 
+// 播放事件
 audioPlayer.addEventListener("play", () => {
 	createSnowflakes();
 	snowAnimation = requestAnimationFrame(animateSnowflakes);
@@ -505,6 +525,7 @@ audioPlayer.addEventListener("play", () => {
 	updateLyrics();
 });
 
+// 暂停事件
 audioPlayer.addEventListener("pause", () => {
 	if (snowAnimation) cancelAnimationFrame(snowAnimation);
 	document
@@ -514,9 +535,12 @@ audioPlayer.addEventListener("pause", () => {
 		);
 });
 
+// 播放结束事件
 audioPlayer.addEventListener("ended", () =>
 	cancelAnimationFrame(snowAnimation)
 );
+
+// 跳转事件
 audioPlayer.addEventListener("seeked", () => {
 	currentLyricIndex =
 		lyrics.findIndex((lyric) => lyric.time > audioPlayer.currentTime) - 1;
@@ -526,6 +550,7 @@ audioPlayer.addEventListener("seeked", () => {
 	updateLyrics();
 });
 
+// 鼠标移动事件
 let mouseMoveTimeout;
 document.addEventListener("mousemove", () => {
 	clearTimeout(mouseMoveTimeout);

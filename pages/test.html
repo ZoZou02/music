@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/line.css">
+    <title>好痛好想回家</title>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 728000px;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            /* 使绝对定位的子元素相对于此元素定位 */
+        }
+
+        #typing {
+            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            width: 100%;
+            height: 100vh;
+            z-index: 20;
+        }
+
+        #typing::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            filter: blur(5px);
+            z-index: -1;
+            transition: transform 0.3s ease;
+        }
+
+        #content {
+            margin-top: 80vh;
+            font-size: 44px;
+            letter-spacing: 25px;
+            color: #fff;
+            font-family: "NSimSun", monospace;
+            transition: transform 0.3s ease-in-out, font-size 0.3s ease-in-out, opacity 1s ease;
+            font-weight: bold;
+        }
+
+        #content:hover {
+            font-size: 50px;
+            transform: scale(1.1);
+        }
+
+        .audioBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            user-select: none;
+            width: 100%;
+        }
+
+        #audioPlayerContainer {
+            position: fixed;
+            top: 5vh;
+            opacity: 1;
+            z-index: 1000;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+
+        #audioPlayerControl {
+            position: relative;
+            background-color: #fff;
+            border-radius: 30px;
+            width: 300px;
+            height: 50px;
+            box-shadow: 0 0 20px rgba(107, 107, 107, 0.5);
+            z-index: 1000;
+        }
+
+        #progressBarContainer {
+            position: absolute;
+            top: 45%;
+            left: 15%;
+            width: 70%;
+            height: 5px;
+            background: linear-gradient(to right,
+                    #5c5387 var(--progress, 0%),
+                    #ddd var(--progress, 0%));
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #progressBarContainer::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            transform: translateY(-50%);
+            background-color: transparent;
+        }
+
+        #progressBar {
+            position: relative;
+            width: 0;
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        #progressBar::after {
+            content: "";
+            position: absolute;
+            right: -7.5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            background-color: #5c5387;
+            box-shadow: 0 1px 10px rgba(107, 107, 107, 0.5);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #progressBarContainer:hover #progressBar::after {
+            opacity: 1;
+        }
+
+        #volumeControlContainer {
+            position: absolute;
+            transition: transform 0.5s ease-in-out;
+            z-index: 0;
+        }
+
+        #volumeControl {
+            width: 50px;
+        }
+
+        #volumeIcon {
+            position: relative;
+            left: 216px;
+        }
+
+        /* 隐藏range控件默认样式 */
+        [type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0;
+            outline: 0;
+            background-color: transparent;
+            width: 500px;
+        }
+
+        /* 定义range控件轨道的样式 */
+        [type="range"]::-webkit-slider-runnable-track {
+            height: 5px;
+            border-radius: 5px;
+            background: #ffffff;
+        }
+
+        /* 定义range控件拇指的样式 */
+        [type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #5c5387;
+            margin-top: -5px;
+        }
+
+        .geebar-image,
+        .phone-image {
+            width: 90vh;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transform-origin: 70% 18%;
+            filter: brightness(1) drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.8));
+            transition: width 1s ease;
+        }
+
+        .background-blur {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://cdn.jsdelivr.net/gh/ZoZou02/zozou-pic/%E6%BB%91%E5%8A%A8%E5%9B%BE%E7%89%87.png');
+            background-size: 100% auto;
+            background-repeat: repeat;
+            filter: blur(10px);
+            z-index: 0;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        /* 选中背景颜色的样式 */
+        ::selection {
+            background-color: #4a4074;
+            color: #fff;
+        }
+
+        /* 左右晃动的动画 */
+        @keyframes shake {
+            0% {
+                left: 46%;
+            }
+
+            20% {
+                left: 45%;
+            }
+
+            40% {
+                left: 45.5%;
+            }
+
+            60% {
+                left: 46.5%;
+            }
+
+            80% {
+                left: 45.5%;
+            }
+
+            100% {
+                left: 46%;
+            }
+        }
+
+
+
+        @keyframes rotate {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            20% {
+                transform: translate(-50%, -50%) rotate(-5deg);
+            }
+
+            40% {
+                transform: translate(-50%, -50%) rotate(5deg);
+            }
+
+            60% {
+                transform: translate(-50%, -50%) rotate(-5deg);
+            }
+
+            80% {
+                transform: translate(-50%, -50%) rotate(5deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+        }
+
+        .phone-image.rotate {
+            animation: rotate 3s infinite linear;
+        }
+
+        .image-container {
+            position: fixed;
+            left: 45%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .image-container.shake {
+            animation: shake 3s ease-in-out 0s infinite;
+        }
+
+        /* 开始动画 */
+        @keyframes slideIn {
+            0% {
+                top: 50%;
+            }
+
+            2% {
+                top: 40%;
+            }
+
+            6% {
+                top: 150%;
+            }
+
+            80% {
+                top: 100%;
+            }
+
+            100% {
+                top: 50%;
+            }
+        }
+
+        .sliding {
+            animation: slideIn 18s ease-in-out forwards, shake 3s ease-in-out 0s infinite;
+        }
+
+        /* 变成说唱歌手动画 */
+        @keyframes rapperDrop {
+            0% {
+                top: 60%;
+                animation-timing-function: ease-out;
+            }
+
+            40%,
+            70% {
+                top: 38%;
+                animation-timing-function: ease-in;
+            }
+
+            100% {
+                top: 50%;
+                animation-timing-function: ease-in;
+            }
+        }
+
+        .rapperDropping {
+            animation: rapperDrop 2.5s ease-in forwards;
+        }
+
+        /* 故障遮罩 */
+        .mask {
+            position: relative;
+            width: 90vh;
+            height: 90vh;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 2000;
+
+            /* 遮罩核心样式 */
+            background: url(https://cdn.jsdelivr.net/gh/ZoZou02/zozou-pic/blueerror.png);
+            background-size: cover;
+            mask: url(https://cdn.jsdelivr.net/gh/ZoZou02/zozou-pic/rappercry.gif);
+            mask-size: cover;
+            mask-position: center;
+            mask-repeat: no-repeat;
+        }
+
+        @keyframes maskBlink {
+
+            0%,
+            30% {
+                opacity: 0;
+            }
+
+            75% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .maskBlinking {
+            animation: maskBlink 1.2s infinite;
+        }
+
+        @keyframes blackDrop {
+            0% {
+                top: 18%;
+            }
+
+            100% {
+                top: 45%;
+            }
+        }
+
+        .blackDropping {
+            animation: blackDrop 12s ease-in-out forwards;
+        }
+
+        /* 全屏按钮样式 */
+        #fullscreen-btn {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        #fullscreen-btn:hover {
+            background-color: #fff;
+            transform: scale(1.1);
+        }
+
+        #fullscreen-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-blur"></div>
+    <div class="overlay"></div>
+    <div id="typing">
+        <div id="content">好痛好想回家</div>
+    </div>
+
+    <div class="audioBox">
+        <div id="audioPlayerContainer">
+            <div id="audioPlayerControl">
+                <svg id="playPauseIcon" width="40" height="48" viewBox="-6 -2 32 32">
+                    <path id="playIcon" d="M10 7.5v15L22.5 15z" fill="#5c5387" />
+                    <path id="pauseIcon" d="M9 22.5h4.5v-15H9v15zm7.5-15v15H21v-15h-4.5z" fill="#5c5387"
+                        style="display: none;" />
+                </svg>
+                <div id="progressBarContainer">
+                    <div id="progressBar"></div>
+                </div>
+                <svg id="volumeIcon" width="40" height="48" viewBox="0 0 24 24">
+                    <path d="M13 5v14l-5-4H3V9h5z" fill="#5c5387" />
+                    <path stroke-linecap="round" d="M13 14c1.5-1 1.5-3 0-4" fill="#5c5387" />
+                </svg>
+
+            </div>
+            <div id="volumeControlContainer" style="transform: translate(230px, -40px)">
+                <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
+            </div>
+
+            <audio id="audioPlayer">
+                <source src="http://music.163.com/song/media/outer/url?id=2085424588.mp3" type="audio/mp3">
+            </audio>
+        </div>
+    </div>
+    <div class="image-container">
+        <div class="mask"></div>
+        <img src="https://cdn.jsdelivr.net/gh/ZoZou02/zozou-pic/geefall1.png" class="geebar-image" alt="Geebar">
+        <img src="https://cdn.jsdelivr.net/gh/ZoZou02/zozou-pic/phone-stra.png" class="phone-image" alt="Phone">
+    </div>
+
+    //扫描线
+    <div class="glitch-overlay"></div>
+    <div id="fullscreen-btn">
+        <svg viewBox="0 0 24 24" fill="#5c5387">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+        </svg>
+    </div>
+    <script src="../assets/js/home.js"></script>
+    <script src="../assets/js/line.js"></script>
+</body>
+
+</html>

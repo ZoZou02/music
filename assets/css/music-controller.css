@@ -192,3 +192,71 @@ html {
 	background-color: #fd2d5c;
 	margin-top: -5px;
 }
+
+.nav-arrows {
+    position: fixed;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.arrow {
+    position: absolute;
+    padding: 20px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+    pointer-events: auto;
+}
+
+.arrow:hover {
+    opacity: 1;
+}
+
+.arrow-left {
+    left: 20px;
+}
+
+.arrow-right {
+    right: 20px;
+}
+
+
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 9999;
+    transform: translateX(100%);
+}
+
+.slide-left {
+    animation: slideLeft 0.5s ease-in-out forwards;
+}
+
+.slide-right {
+    animation: slideRight 0.5s ease-in-out forwards;
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideRight {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
