@@ -766,3 +766,24 @@ function toggleScanlines(show) {
         glitchOverlay.style.display = show ? 'block' : 'none';
     }
 }
+
+window.addEventListener('load', function() {
+    const images = document.querySelectorAll('img');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    Promise.all(Array.from(images).map(img => {
+        if (img.complete) {
+            return Promise.resolve();
+        } else {
+            return new Promise(resolve => {
+                img.addEventListener('load', resolve);
+                img.addEventListener('error', resolve);
+            });
+        }
+    })).then(() => {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 1000);
+    });
+});
